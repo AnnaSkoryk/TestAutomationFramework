@@ -1,0 +1,22 @@
+﻿[
+  {
+    "name": "John",
+    "lastName": "Doe",
+    "email": "j.d@e.com",
+    "isMale": false,
+    "password": "SecureP@ss123",
+    "dateOfBirth": "1990-05-15T00:00:00",
+    "company": "Doe Industries",
+    "address": "123 Main Street",
+    "address2": "Suite 456",
+    "country": "United States",
+    "state": "California",
+    "city": "Los Angeles",
+    "zipcode": "90001",
+    "mobileNumber": "+1-555-123-4567",
+    "enterAccountInfoText": "Enter Account Information",
+    "newUserSignUpText": "New User Signup!",
+    "accountCreatedText": "Account Created!",
+    "accountDeletedText": "Account Deleted!"
+  }
+]

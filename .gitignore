@@ -1,0 +1,55 @@
+## Build results
+bin/
+obj/
+out/
+TestResults/
+*.log
+
+## User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## Rider/JetBrains-specific
+.idea/
+*.DotSettings.user
+
+## Visual Studio Code
+.vscode/
+
+## Visual Studio
+.vs/
+Generated_Code/
+
+## NuGet packages
+*.nupkg
+# The packages folder can be ignored because of PackageReference
+**/packages/*
+!**/packages/build/
+!**/packages/repositories.config
+.nuget/
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings
+
+## Selenium browser profiles (optional)
+selenium-profile/
+
+## Others
+*.dbmdl
+*.bak
+*.cache
+*.config.backup
+*.orig
+
+# NUnit test results
+*.TestResult.xml
+*.trx
+
+# OS generated
+.DS_Store
+Thumbs.db
