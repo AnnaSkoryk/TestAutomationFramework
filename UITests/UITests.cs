@@ -2,14 +2,16 @@
 using OpenQA.Selenium.Chrome;
 using UITests;
 using UITests.PageObject;
-//using NUnit.Allure.Attributes;
-//using NUnit.Allure.Core;
-//using Allure.Commons;
+using NUnit.Allure.Attributes;
+using NUnit.Allure.Core;
+using Allure.Commons;
 using Newtonsoft.Json.Linq;
 
 
 namespace TestAutomationFramework
 {
+    [AllureNUnit]
+    [AllureSuite("SmokeTest")]
     [TestFixture(Category = "SmokeTest")]
     public class SmokeTests
     {
@@ -21,7 +23,7 @@ namespace TestAutomationFramework
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
-           // AllureLifecycle.Instance.CleanupResultDirectory();
+           AllureLifecycle.Instance.CleanupResultDirectory();
         }
 
         [SetUp]
@@ -36,15 +38,15 @@ namespace TestAutomationFramework
             driver.Manage().Window.Maximize();
         }
 
-        //0
         [Test]
+        [AllureTms("1")]
         public void CheckWelcomePageExistsAndVisibleAfterEnterTheSite()
         {
             welcomePage.CheckElementExist(By.CssSelector(welcomePage.welcomeDialogClassNameLocator));
         }
 
-        //1
         [Test, TestCaseSource(typeof(TestDataLoader), nameof(TestDataLoader.LoadTestData), new object[] { "TestData/RegisterUser.json" })]
+        [AllureTms("2")]
         public void RegisterUser(JToken testData)
         {
             welcomePage.ClickConsentBtn();
@@ -53,8 +55,8 @@ namespace TestAutomationFramework
             methods.CheckDeleteCurrentAccount(testData);
         }
 
-        //2
         [Test, TestCaseSource(typeof(TestDataLoader), nameof(TestDataLoader.LoadTestData), new object[] { "TestData/LoginUser.json" })]
+        [AllureTms("3")]
         public void LoginUser(JToken testData)
         {
             welcomePage.ClickConsentBtn();
@@ -62,8 +64,8 @@ namespace TestAutomationFramework
             methods.CheckLogInUser(testData);
         }
 
-        //3
         [Test, TestCaseSource(typeof(TestDataLoader), nameof(TestDataLoader.LoadTestData), new object[] { "TestData/NotValidLoginUser.json" })]
+        [AllureTms("4")]
         public void TryLoginUserWithNotValidEmailAndPassword(JToken testData)
         {
             welcomePage.ClickConsentBtn();
@@ -71,8 +73,8 @@ namespace TestAutomationFramework
             methods.CheckLogInUser(testData, isPositiveTest: false);
         }
 
-        //4
         [Test, TestCaseSource(typeof(TestDataLoader), nameof(TestDataLoader.LoadTestData), new object[] { "TestData/LoginUser.json" })]
+        [AllureTms("5")]
         public void LogoutUser(JToken testData)
         {
             welcomePage.ClickConsentBtn();
@@ -81,8 +83,8 @@ namespace TestAutomationFramework
             methods.CheckLogoutUser();
         }
 
-        //5
         [Test, TestCaseSource(typeof(TestDataLoader), nameof(TestDataLoader.LoadTestData), new object[] { "TestData/RegisterUserWithExistingEmail.json" })]
+        [AllureTms("6")]
         public void TryRegisterUserWithExistingEmail(JToken testData)
         {
             welcomePage.ClickConsentBtn();
@@ -93,7 +95,7 @@ namespace TestAutomationFramework
         [TearDown]
         public void TearDown()
         {
-            //driver.Quit();
+            driver.Quit();
         }
 
         [OneTimeTearDown]
