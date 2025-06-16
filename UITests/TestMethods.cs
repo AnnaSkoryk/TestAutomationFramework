@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
+using System.Xml.Linq;
 using UITests.PageObject;
 
 namespace UITests
@@ -14,11 +15,41 @@ namespace UITests
 
         public IWebElement continueButton => driver.FindElement(By.XPath(continueBtnXPathLocator));
 
-        public void CheckSignUpUser(JToken testData)
+        public void CheckSignUpUser(JToken testData, bool isEmailExists = false)
         {
             //get test data
+            HomePage homePage = new HomePage(driver);
+            homePage.signUp_logInTab.Click();
+
+            //check text msg
+            LoginPage loginPage = new LoginPage(driver);
+            string newUserSignUpText = testData["newUserSignUpText"]?.ToString();
+            CheckElementExist(By.XPath(loginPage.newUserSignUpTextXPathLocator));
+            CheckElementText(By.XPath(loginPage.newUserSignUpTextXPathLocator), newUserSignUpText);
+
             string name = testData["name"]?.ToString();
             string email = testData["email"]?.ToString();
+            loginPage.signUpNameField.SendKeys(name);
+            loginPage.signUpEmailField.SendKeys(email);
+            loginPage.signupButton.Click();
+
+            if (isEmailExists) 
+            {
+                string emailExistsErrorMessage = testData["emailExistsErrorMessage"]?.ToString();
+                CheckElementExist(By.XPath(loginPage.emailExistsErrorMessageLocator));
+                CheckElementText(By.XPath(loginPage.emailExistsErrorMessageLocator), emailExistsErrorMessage);
+            }
+            else
+            {
+                SignUpUser(name, testData);
+
+                //16.Verify that 'Logged in as username' is visible
+                CheckElementExist(By.XPath(homePage.loggedInUserTabXPathLocator.Replace("user", name)));
+            }
+        }
+
+        public void SignUpUser(string name, JToken testData)
+        {
             string password = testData["password"]?.ToString();
             bool isMale = Convert.ToBoolean(testData["isMale"]);
             DateTime dateOfBirth = Convert.ToDateTime(testData["dateOfBirth"]);
@@ -31,22 +62,8 @@ namespace UITests
             string city = testData["city"]?.ToString();
             string zipcode = testData["zipcode"]?.ToString();
             string mobileNumber = testData["mobileNumber"]?.ToString();
-            string newUserSignUpText = testData["newUserSignUpText"]?.ToString();
             string enterAccountInfoText = testData["enterAccountInfoText"]?.ToString();
             string accountCreatedText = testData["accountCreatedText"]?.ToString();
-            
-            HomePage homePage = new HomePage(driver);
-            homePage.signUp_logInTab.Click();
-
-            LoginPage loginPage = new LoginPage(driver);
-
-            //check text msg
-            CheckElementExist(By.XPath(loginPage.newUserSignUpTextXPathLocator));
-            CheckElementText(By.XPath(loginPage.newUserSignUpTextXPathLocator), newUserSignUpText);
-
-            loginPage.signUpNameField.SendKeys(name);
-            loginPage.signUpEmailField.SendKeys(email);
-            loginPage.signupButton.Click();
 
             SignupPage signupPage = new SignupPage(driver);
 
@@ -54,15 +71,12 @@ namespace UITests
             CheckElementExist(By.XPath(signupPage.enterAccountInfoTextXPathLocator));
             CheckElementText(By.XPath(signupPage.enterAccountInfoTextXPathLocator), enterAccountInfoText);
 
-            signupPage.SignUpUser(name, password, isMale, dateOfBirth, lastName, company, address, address2, country, state, city, zipcode, mobileNumber);
-           
+            signupPage.FillDataOnSignupPage(name, password, isMale, dateOfBirth, lastName, company, address, address2, country, state, city, zipcode, mobileNumber);
+
             //check message on primary page
             CheckElementExist(By.XPath(accountCreatedTextXPathLocator));
-            CheckElementText(By.XPath(accountCreatedTextXPathLocator),  accountCreatedText);
+            CheckElementText(By.XPath(accountCreatedTextXPathLocator), accountCreatedText);
             continueButton.Click();
-
-            //16.Verify that 'Logged in as username' is visible
-            CheckElementExist(By.XPath(homePage.loggedInUserTabXPathLocator.Replace("user", name)));
         }
 
         public void CheckLogInUser(JToken testData, bool isPositiveTest = true)

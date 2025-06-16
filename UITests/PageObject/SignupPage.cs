@@ -52,7 +52,7 @@ namespace UITests.PageObject
         public IWebElement mobileNumberField => driver.FindElement(By.Id(mobileNumberFieldIdLocator));
         public IWebElement createAccountButton => driver.FindElement(By.XPath(createAccountBtnXPathLocator));
 
-        public void SignUpUser(string name, string password, bool isMale, DateTime dateOfBirth, string lastName, string company, string address, string address2, string country, string state, string city, string zipcode, string mobileNumber, bool signUpNewsletters = true, bool receiveSpecialOffers = true)
+        public void FillDataOnSignupPage(string name, string password, bool isMale, DateTime dateOfBirth, string lastName, string company, string address, string address2, string country, string state, string city, string zipcode, string mobileNumber, bool signUpNewsletters = true, bool receiveSpecialOffers = true)
         {
             //gender
             if (isMale) 

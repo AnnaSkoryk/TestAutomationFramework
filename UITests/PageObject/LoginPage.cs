@@ -18,6 +18,8 @@ namespace UITests.PageObject
         public string loginErrorTextXPathLocator => "//form[@action='/login']//p";
         public string loginFormCSSLocator => ".login-form";
         public string signupFormCSSLocator => ".signup-form";
+        public string emailExistsErrorMessageLocator => "//form[@action='/signup']//p";
+        
 
         public IWebElement signupButton => driver.FindElement(By.XPath(btnSignupXPathLocator));
         public IWebElement signUpNameField => driver.FindElement(By.XPath(signUpNameXPathLocator));

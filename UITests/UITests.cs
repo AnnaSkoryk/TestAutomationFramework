@@ -81,6 +81,15 @@ namespace TestAutomationFramework
             methods.CheckLogoutUser();
         }
 
+        //5
+        [Test, TestCaseSource(typeof(TestDataLoader), nameof(TestDataLoader.LoadTestData), new object[] { "TestData/RegisterUserWithExistingEmail.json" })]
+        public void TryRegisterUserWithExistingEmail(JToken testData)
+        {
+            welcomePage.ClickConsentBtn();
+            homePage.CheckHomePageDisplayed();
+            methods.CheckSignUpUser(testData, isEmailExists: true);
+        }
+
         [TearDown]
         public void TearDown()
         {

@@ -15,6 +15,9 @@
     <Content Include="TestData\LoginUser.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="TestData\RegisterUserWithExistingEmail.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestData\RegisterUser.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
