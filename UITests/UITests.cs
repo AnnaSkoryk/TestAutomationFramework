@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 namespace TestAutomationFramework
 {
     [AllureNUnit]
-    [AllureSuite("SmokeTest")]
+    //[AllureSuite("SmokeTest")]
     [TestFixture(Category = "SmokeTest")]
     public class SmokeTests
     {

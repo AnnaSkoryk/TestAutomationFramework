@@ -9,6 +9,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="C:\Users\annas\.nuget\packages\allure.net.commons\2.12.1\contentFiles\any\netstandard2.0\allureConfig.Template.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="allureconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="allureconfig.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestData\NotValidLoginUser.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -31,7 +42,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="NUnit" Version="4.3.2" />
-    <PackageReference Include="NUnit.Allure" Version="1.2.1.1" />
+    <PackageReference Include="NUnit.Allure" Version="1.2.0.1" />
     <PackageReference Include="NUnit.Analyzers" Version="4.8.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
