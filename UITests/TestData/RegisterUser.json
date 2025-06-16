@@ -1,8 +1,8 @@
 ﻿[
   {
-    "name": "John",
-    "lastName": "Doe",
-    "email": "j.d@e.com",
+    "name": "Johnie",
+    "lastName": "Do",
+    "email": "j.k@e.com",
     "isMale": false,
     "password": "SecureP@ss123",
     "dateOfBirth": "1990-05-15T00:00:00",

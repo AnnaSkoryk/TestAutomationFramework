@@ -36,12 +36,14 @@ namespace TestAutomationFramework
             driver.Manage().Window.Maximize();
         }
 
+        //0
         [Test]
         public void CheckWelcomePageExistsAndVisibleAfterEnterTheSite()
         {
             welcomePage.CheckElementExist(By.CssSelector(welcomePage.welcomeDialogClassNameLocator));
         }
 
+        //1
         [Test, TestCaseSource(typeof(TestDataLoader), nameof(TestDataLoader.LoadTestData), new object[] { "TestData/RegisterUser.json" })]
         public void RegisterUser(JToken testData)
         {
@@ -51,10 +53,38 @@ namespace TestAutomationFramework
             methods.CheckDeleteCurrentAccount(testData);
         }
 
+        //2
+        [Test, TestCaseSource(typeof(TestDataLoader), nameof(TestDataLoader.LoadTestData), new object[] { "TestData/LoginUser.json" })]
+        public void LoginUser(JToken testData)
+        {
+            welcomePage.ClickConsentBtn();
+            homePage.CheckHomePageDisplayed();
+            methods.CheckLogInUser(testData);
+        }
+
+        //3
+        [Test, TestCaseSource(typeof(TestDataLoader), nameof(TestDataLoader.LoadTestData), new object[] { "TestData/NotValidLoginUser.json" })]
+        public void TryLoginUserWithNotValidEmailAndPassword(JToken testData)
+        {
+            welcomePage.ClickConsentBtn();
+            homePage.CheckHomePageDisplayed();
+            methods.CheckLogInUser(testData, isPositiveTest: false);
+        }
+
+        //4
+        [Test, TestCaseSource(typeof(TestDataLoader), nameof(TestDataLoader.LoadTestData), new object[] { "TestData/LoginUser.json" })]
+        public void LogoutUser(JToken testData)
+        {
+            welcomePage.ClickConsentBtn();
+            homePage.CheckHomePageDisplayed();
+            methods.CheckLogInUser(testData);
+            methods.CheckLogoutUser();
+        }
+
         [TearDown]
         public void TearDown()
         {
-            driver.Quit();
+            //driver.Quit();
         }
 
         [OneTimeTearDown]

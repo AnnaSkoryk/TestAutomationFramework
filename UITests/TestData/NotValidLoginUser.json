@@ -1,0 +1,9 @@
+﻿[
+  {
+    "loginToAccountText": "Login to your account",
+    "name": "Johnie1",
+    "password": "SecureP@ss123",
+    "email": "j.k1@e.com",
+    "loginErrorText": "Your email or password is incorrect!"
+  }
+]

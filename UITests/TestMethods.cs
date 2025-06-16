@@ -46,7 +46,7 @@ namespace UITests
 
             loginPage.signUpNameField.SendKeys(name);
             loginPage.signUpEmailField.SendKeys(email);
-            loginPage.submitButton.Click();
+            loginPage.signupButton.Click();
 
             SignupPage signupPage = new SignupPage(driver);
 
@@ -65,6 +65,39 @@ namespace UITests
             CheckElementExist(By.XPath(homePage.loggedInUserTabXPathLocator.Replace("user", name)));
         }
 
+        public void CheckLogInUser(JToken testData, bool isPositiveTest = true)
+        {
+            //get test data
+            string loginToAccountText = testData["loginToAccountText"]?.ToString();
+            string email = testData["email"]?.ToString();
+            string password = testData["password"]?.ToString();
+            string loginErrorMessage = testData["loginErrorText"]?.ToString();
+
+            HomePage homePage = new HomePage(driver);
+            homePage.signUp_logInTab.Click();
+
+            //check text msg
+            LoginPage loginPage = new LoginPage(driver);
+            CheckElementExist(By.XPath(loginPage.loginToAccountTextXPathLocator));
+            CheckElementText(By.XPath(loginPage.loginToAccountTextXPathLocator), loginToAccountText);
+
+            loginPage.loginEmailField.SendKeys(email);
+            loginPage.loginPasswordField.SendKeys(password);
+            loginPage.loginButton.Click();
+
+            //16.Verify that 'Logged in as username' is visible
+            if (isPositiveTest)
+            {
+                string name = testData["name"]?.ToString();
+                CheckElementExist(By.XPath(homePage.loggedInUserTabXPathLocator.Replace("user", name)));
+            }
+            else
+            {
+                CheckElementExist(By.XPath(loginPage.loginErrorTextXPathLocator));
+                CheckElementText(By.XPath(loginPage.loginErrorTextXPathLocator), loginErrorMessage);
+            }
+        }
+
         public void CheckDeleteCurrentAccount(JToken testData)
         {
             //inputs
@@ -81,5 +114,15 @@ namespace UITests
             continueButton.Click();
         }
 
+        public void CheckLogoutUser()
+        {
+            HomePage homePage = new HomePage(driver);
+            IWebElement logoutTab = driver.FindElement(By.XPath(homePage.logoutTabXPathLocator));
+            logoutTab.Click();
+
+            //check login page displayed
+            LoginPage loginPage = new LoginPage(driver);
+            loginPage.CheckLoginPageDisplayed();
+        }
     }
 }

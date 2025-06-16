@@ -13,7 +13,8 @@ namespace UITests.PageObject
         public string sliderIdLocator => "slider";
         public string containerXPathLocator => "//section[2]/div[contains(@class, 'container')]";
         public string deleteAccountTabXPathLocator => "//a[contains(., ' Delete Account')]";
-        
+        public string logoutTabXPathLocator => "//a[contains(., ' Logout')]";
+
         public IWebElement homeTab => driver.FindElement(By.XPath(homeTabXPathLocator));
         public IWebElement signUp_logInTab => driver.FindElement(By.XPath(signUp_LogInTabXPathLocator));
         
