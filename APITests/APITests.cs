@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework.Internal;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using NUnit.Framework.Legacy;
 
 namespace APITests
