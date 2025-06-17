@@ -10,8 +10,8 @@ using Allure.NUnit.Attributes;
 namespace TestAutomationFramework
 {
     [AllureNUnit]
-    [AllureSuite("Smoke Test")]
-    [TestFixture(Category = "Smoke Test")]
+    [AllureSuite("UI Smoke Test")]
+    [TestFixture(Category = "UI Smoke Test")]
     public class SmokeTests
     {
         IWebDriver driver;

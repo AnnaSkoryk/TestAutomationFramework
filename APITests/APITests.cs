@@ -1,41 +1,98 @@
 ﻿using NUnit.Framework.Internal;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium;
+using RestSharp;
+using Allure.NUnit;
+using Allure.NUnit.Attributes;
+using Newtonsoft.Json;
+using APITests.Models;
 using NUnit.Framework.Legacy;
+using System.Net;
 
 namespace APITests
 {
-    [TestFixture(Category = "SmokeTest")]
+    [AllureNUnit]
+    [AllureSuite("API Smoke Test")]
+    [TestFixture(Category = "API SmokeTest")]
     public class SmokeTests
     {
-        private HttpClient httpClient;
-        private string apiUri;
+        private RestClient restClient;
+        private string apiResource;
+        private TestMethods method;
 
         [SetUp]
         public void Setup()
         {
-            httpClient = new HttpClient();
+            restClient = new RestClient(new RestClientOptions
+            {
+                BaseUrl = new Uri("https://automationexercise.com")
+            });
+            method = new TestMethods(restClient);
         }
 
-        //1
         [Test]
+        [AllureId(1)]
         public void GetAllProductsList()
         {
-            apiUri = "https://automationexercise.com/api/productsList";
+            apiResource = "api/productsList";
 
-            Task<HttpResponseMessage> response = httpClient.GetAsync(apiUri);
-            HttpResponseMessage responseMessage = response.Result;
-            Task<string> responseBody = httpClient.GetStringAsync(apiUri);
-
-            ClassicAssert.AreEqual((int)responseMessage.StatusCode, 200);
-            //httpClient.GetAsync(apiUri);
-            //Assert.Pass();
+            RestResponse response; 
+            method.SendRequest(apiResource, Method.Get, HttpStatusCode.OK, out response);
+            Products jsonResponse;
+            method.TryDeserializeResponseToJSON<Products>(response, out jsonResponse);
         }
+
+        [Test]
+        [AllureId(2)]
+        public void TryPostToAllProductsList()
+        {
+            apiResource = "api/productsList";
+            string expectedText = "This request method is not supported.";
+
+            RestResponse response;
+            method.SendRequest(apiResource, Method.Post, HttpStatusCode.MethodNotAllowed, out response);
+            ClassicAssert.IsTrue(response.Content.Contains(expectedText));
+        }
+
+        [Test]
+        [AllureId(3)]
+        public void GetAllBrandsList()
+        {
+            apiResource = "api/brandsList";
+
+            RestResponse response;
+            method.SendRequest(apiResource, Method.Get, HttpStatusCode.OK, out response);
+            Brands jsonResponse;
+            method.TryDeserializeResponseToJSON<Brands>(response, out jsonResponse);
+        }
+
+        [Test]
+        [AllureId(4)]
+        public void PutToAllBrandsList()
+        {
+            apiResource = "api/brandsList";
+            string expectedText = "This request method is not supported.";
+
+            RestResponse response;
+            method.SendRequest(apiResource, Method.Put, HttpStatusCode.MethodNotAllowed, out response);
+            ClassicAssert.IsTrue(response.Content.Contains(expectedText));
+        }
+
+        //[Test]
+        //[AllureId(5)]
+        //public void PostToSearchProduct()
+        //{
+        //    apiResource = "api/searchProduct";
+
+        //    RestResponse response;
+        //    method.SendRequest(apiResource, Method.Get, HttpStatusCode.OK, out response);
+            
+        //    Products jsonResponse;
+        //    method.TryDeserializeResponseToJSON<Products>(response, out jsonResponse);
+        //}
 
         [TearDown]
         public void TearDown()
         {
-            httpClient.Dispose();
+            restClient.Dispose();
         }
     }
 }
