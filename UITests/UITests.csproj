@@ -13,10 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="allureconfig.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="allureconfig.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
