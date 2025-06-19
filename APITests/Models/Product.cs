@@ -21,7 +21,7 @@ namespace APITests.Models
         public Category category { get; set; }
     }
 
-    public class Products
+    public class Products : IModel
     {
         public int responseCode { get; set; }
         public List<Product> products { get; set; }

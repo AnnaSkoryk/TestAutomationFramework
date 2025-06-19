@@ -1,6 +1,6 @@
- "name": "John",
+ "name": "Johnie",
  "password": "SecureP@ss123",
- "email": "j.d@e.com",
+ "email": "j.k@e.com",
  "isMale": true,
  "dateOfBirth": "1990-05-15T00:00:00",
  "company": "Doe Industries",

@@ -94,12 +94,13 @@ namespace TestAutomationFramework
         [TearDown]
         public void TearDown()
         {
-            driver.Quit();
+           driver.Quit();
         }
 
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
+
         }
     }
 }

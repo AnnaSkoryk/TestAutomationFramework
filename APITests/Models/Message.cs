@@ -6,16 +6,9 @@ using System.Threading.Tasks;
 
 namespace APITests.Models
 {
-    public class Brand
-    {
-        public int id { get; set; }
-        public string brand { get; set; }
-    }
-
-    public class Brands : IModel
+    public class Message : IModel
     {
         public int responseCode { get; set; }
-        public List<Brand> brands { get; set; }
+        public string message { get; set; }
     }
-
 }

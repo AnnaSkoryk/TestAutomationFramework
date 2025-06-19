@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using APITests.Models;
+using Newtonsoft.Json;
 using NUnit.Framework.Legacy;
 using RestSharp;
 using System;
@@ -24,28 +25,53 @@ namespace APITests
             jsonResponse = default!;
             try
             {
-                jsonResponse = JsonConvert.DeserializeObject<T>(response.Content);
+                var settings = new JsonSerializerSettings
+                {
+                    MissingMemberHandling = MissingMemberHandling.Error
+                };
+                jsonResponse = JsonConvert.DeserializeObject<T>(response.Content, settings);
+
                 ClassicAssert.IsNotNull(jsonResponse, "Deserialization returned null.");
             }
             catch (JsonReaderException ex)
             {
-                Console.WriteLine("Invalid JSON format: " + ex.Message);
+                Assert.Fail("Invalid JSON format: " + ex.Message);
             }
             catch (JsonSerializationException ex)
             {
-                Console.WriteLine("JSON doesn't match the model: " + ex.Message);
+                Assert.Fail("JSON doesn't match the model: " + ex.Message);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unexpected error: " + ex.Message);
+                Assert.Fail("Unexpected error: " + ex.Message);
             }
         }
 
-        public void SendRequest(string apiResource, Method method, HttpStatusCode expectedStatusCode, out RestResponse response)
+        public void SendRequest(string apiResource, Method method, HttpStatusCode expectedStatusCode, out RestResponse response, bool sendWithParams = false, Dictionary<string, string> parameters = null)
         {
             var request = new RestRequest(apiResource, method);
+            if (sendWithParams)
+                foreach (var param in parameters)
+                {
+                    request.AddParameter(param.Key, param.Value);
+                }
             response = restClient.Execute(request);
-            ClassicAssert.AreEqual(expectedStatusCode, response.StatusCode);
+        }
+
+        public T GetJsonResponse<T>(string apiResource, Method method, out RestResponse response, bool sendWithParams = false, Dictionary<string, string> parameters = null)
+        where T : IModel
+        {
+            var request = new RestRequest(apiResource, method);
+            if (sendWithParams)
+                foreach (var param in parameters)
+                {
+                    request.AddParameter(param.Key, param.Value);
+                }
+            response = restClient.Execute(request);
+
+            T jsonResponse;
+            TryDeserializeResponseToJSON<T>(response, out jsonResponse);
+            return jsonResponse;
         }
     }
 }
