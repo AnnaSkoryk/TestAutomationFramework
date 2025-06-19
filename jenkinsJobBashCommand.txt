@@ -1,0 +1,11 @@
+echo ==== Restore ====
+dotnet restore TestAutomationFramework.sln
+
+echo ==== Build ====
+dotnet build TestAutomationFramework.sln --configuration Release --no-restore
+
+echo ==== Test API ====
+dotnet test APITests/APITests.csproj --configuration Release --no-build --settings:nunit.runsettings
+
+echo ==== Test UI ====
+dotnet test UITests/UITests.csproj --configuration Release --no-build --settings:nunit.runsettings
