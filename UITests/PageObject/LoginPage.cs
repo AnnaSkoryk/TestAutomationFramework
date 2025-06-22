@@ -1,5 +1,4 @@
-﻿using NUnit.Framework.Legacy;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 
 namespace UITests.PageObject
 {
@@ -19,7 +18,8 @@ namespace UITests.PageObject
         public string loginFormCSSLocator => ".login-form";
         public string signupFormCSSLocator => ".signup-form";
         public string emailExistsErrorMessageLocator => "//form[@action='/signup']//p";
-        
+
+
 
         public IWebElement signupButton => driver.FindElement(By.XPath(btnSignupXPathLocator));
         public IWebElement signUpNameField => driver.FindElement(By.XPath(signUpNameXPathLocator));

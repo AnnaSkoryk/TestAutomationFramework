@@ -8,6 +8,7 @@ namespace UITests.PageObject
         public HomePage(IWebDriver driver) : base(driver) { }
 
         public string homeTabXPathLocator => "//a[contains(., ' Home')]";
+        public string contactUsTabXPathLocator => "//a[contains(., ' Contact us')]";
         public string loggedInUserTabXPathLocator => "//a[contains(., ' Logged in as ')]//b[text()='user']";
         public string signUp_LogInTabXPathLocator => "//a[text()=' Signup / Login']";
         public string sliderIdLocator => "slider";
@@ -16,6 +17,7 @@ namespace UITests.PageObject
         public string logoutTabXPathLocator => "//a[contains(., ' Logout')]";
 
         public IWebElement homeTab => driver.FindElement(By.XPath(homeTabXPathLocator));
+        public IWebElement contactUsTab => driver.FindElement(By.XPath(contactUsTabXPathLocator));
         public IWebElement signUp_logInTab => driver.FindElement(By.XPath(signUp_LogInTabXPathLocator));
         
         public void CheckHomePageDisplayed()

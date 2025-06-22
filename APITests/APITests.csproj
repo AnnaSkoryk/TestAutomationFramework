@@ -9,6 +9,36 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="TestData\BadRequest.json" />
+    <None Remove="TestData\CreateUser.json" />
+    <None Remove="TestData\Login.json" />
+    <None Remove="TestData\LoginWithNotValidParams.json" />
+    <None Remove="TestData\MethodNotSupported.json" />
+    <None Remove="TestData\SearchProduct.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="TestData\BadRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\CreateUser.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Login.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\LoginWithNotValidParams.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\MethodNotSupported.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\SearchProduct.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Allure.NUnit" Version="2.12.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="NUnit" Version="4.3.2" />

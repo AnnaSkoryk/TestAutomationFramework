@@ -1,5 +1,4 @@
-﻿
-namespace UITests
+﻿namespace UITests
 {
     public static class GeneralConfig
     {

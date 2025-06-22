@@ -91,6 +91,17 @@ namespace TestAutomationFramework
             methods.CheckSignUpUser(testData, isEmailExists: true);
         }
 
+
+        [Test, TestCaseSource(typeof(TestDataLoader), nameof(TestDataLoader.LoadTestData), new object[] { "TestData/ContactUs.json" })]
+        [AllureId(7)]
+        public void ChceckContactUsForm(JToken testData)
+        {
+            welcomePage.ClickConsentBtn();
+            homePage.CheckHomePageDisplayed();
+            methods.CheckContactUsForm(testData);
+            homePage.CheckHomePageDisplayed();
+        }
+
         [TearDown]
         public void TearDown()
         {

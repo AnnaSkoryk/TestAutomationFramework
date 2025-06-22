@@ -2,10 +2,10 @@
 using RestSharp;
 using Allure.NUnit;
 using Allure.NUnit.Attributes;
-using Newtonsoft.Json;
 using APITests.Models;
 using NUnit.Framework.Legacy;
 using System.Net;
+using Newtonsoft.Json.Linq;
 
 namespace APITests
 {
@@ -39,12 +39,12 @@ namespace APITests
             ClassicAssert.AreEqual((int)HttpStatusCode.OK, jsonResponse.responseCode);  
         }
 
-        [Test]
+        [Test, TestCaseSource(typeof(TestDataLoader), nameof(TestDataLoader.LoadTestData), new object[] { "TestData/MethodNotSupported.json" })]
         [AllureId(2)]
-        public void TryPostToAllProductsList()
+        public void TryPostToAllProductsList(JToken testData)
         {
             apiResource = "api/productsList";
-            string expectedText = "This request method is not supported.";
+            string expectedText = testData["errorText"]?.ToString();
 
             RestResponse response;
             Message jsonResponse = method.GetJsonResponse<Message>(apiResource, Method.Post, out response);
@@ -67,12 +67,12 @@ namespace APITests
             ClassicAssert.AreEqual((int)HttpStatusCode.OK, jsonResponse.responseCode);
         }
 
-        [Test]
+        [Test, TestCaseSource(typeof(TestDataLoader), nameof(TestDataLoader.LoadTestData), new object[] { "TestData/MethodNotSupported.json" })]
         [AllureId(4)]
-        public void TryPutToAllBrandsList()
+        public void TryPutToAllBrandsList(JToken testData)
         {
             apiResource = "api/brandsList";
-            string expectedText = "This request method is not supported.";
+            string expectedText = testData["errorText"]?.ToString();
 
             RestResponse response;
             Message jsonResponse = method.GetJsonResponse<Message>(apiResource, Method.Put, out response);
@@ -84,25 +84,27 @@ namespace APITests
             });
         }
 
-        [Test]
+        [Test, TestCaseSource(typeof(TestDataLoader), nameof(TestDataLoader.LoadTestData), new object[] { "TestData/SearchProduct.json" })]
         [AllureId(5)]
-        public void PostToSearchProductWithParam()
+        public void PostToSearchProductWithParam(JToken testData)
         {
             apiResource = "api/searchProduct";
-            Dictionary<string, string> param = new Dictionary<string, string>();
-            param.Add("search_product", "top");
+            Dictionary<string, string> param = new Dictionary<string, string>
+            {
+                { "search_product", testData["searchProduct"]?.ToString() }
+            };
 
             RestResponse response;
             Products jsonResponse = method.GetJsonResponse<Products>(apiResource, Method.Post, out response, sendWithParams: true, param);
             ClassicAssert.AreEqual((int)HttpStatusCode.OK, jsonResponse.responseCode);
         }
-        
-        [Test]
+
+        [Test, TestCaseSource(typeof(TestDataLoader), nameof(TestDataLoader.LoadTestData), new object[] { "TestData/BadRequest.json" })]
         [AllureId(6)]
-        public void TryPostToSearchWithoutParam()
+        public void TryPostToSearchWithoutParam(JToken testData)
         {
             apiResource = "api/searchProduct";
-            string expectedText = "Bad request, search_product parameter is missing in POST request.";
+            string expectedText = testData["errorText"]?.ToString();
             
             RestResponse response;
             Message jsonResponse = method.GetJsonResponse<Message>(apiResource, Method.Post, out response);
@@ -114,15 +116,17 @@ namespace APITests
             });
         }
 
-        [Test]
+        [Test, TestCaseSource(typeof(TestDataLoader), nameof(TestDataLoader.LoadTestData), new object[] { "TestData/Login.json" })]
         [AllureId(7)]
-        public void PostToLoginWithValidParams()
+        public void PostToLoginWithValidParams(JToken testData)
         {
             apiResource = "api/verifyLogin";
-            Dictionary<string, string> param = new Dictionary<string, string>();
-            param.Add("email", "j.k@e.com");
-            param.Add("password", "SecureP@ss123");
-            string expectedText = "User exists!";
+            Dictionary<string, string> param = new Dictionary<string, string>
+            {
+                { "email", testData["email"]?.ToString() },
+                { "password", testData["password"]?.ToString() }
+            };
+            string expectedText = testData["message"]?.ToString();
 
             RestResponse response;
             Message jsonResponse = method.GetJsonResponse<Message>(apiResource, Method.Post, out response, sendWithParams: true, param);
@@ -134,14 +138,16 @@ namespace APITests
             });
         }
 
-        [Test]
+        [Test, TestCaseSource(typeof(TestDataLoader), nameof(TestDataLoader.LoadTestData), new object[] { "TestData/Login.json" })]
         [AllureId(8)]
-        public void TryPostToLoginWithoutEmailParam()
+        public void TryPostToLoginWithoutEmailParam(JToken testData)
         {
             apiResource = "api/verifyLogin"; 
-            Dictionary<string, string> param = new Dictionary<string, string>();
-            param.Add("password", "SecureP@ss123");
-            string expectedText = "Bad request, email or password parameter is missing in POST request.";
+            Dictionary<string, string> param = new Dictionary<string, string>
+            {
+                { "password", testData["paramVal2"]?.ToString() }
+            };
+            string expectedText = testData["badRequestText"]?.ToString();
 
             RestResponse response;
             Message jsonResponse = method.GetJsonResponse<Message>(apiResource, Method.Post, out response, sendWithParams: true, param);
@@ -153,12 +159,12 @@ namespace APITests
             });
         }
 
-        [Test]
+        [Test, TestCaseSource(typeof(TestDataLoader), nameof(TestDataLoader.LoadTestData), new object[] { "TestData/Login.json" })]
         [AllureId(9)]
-        public void TryDeleteToVerifyLogins()
+        public void TryDeleteToVerifyLogins(JToken testData)
         {
             apiResource = "api/verifyLogin";
-            string expectedText = "This request method is not supported.";
+            string expectedText = testData["notSupportedText"]?.ToString();
 
             RestResponse response;
             Message jsonResponse = method.GetJsonResponse<Message>(apiResource, Method.Delete, out response);
@@ -170,15 +176,17 @@ namespace APITests
             });
         }
 
-        [Test]
+        [Test, TestCaseSource(typeof(TestDataLoader), nameof(TestDataLoader.LoadTestData), new object[] { "TestData/LoginWithNotValidParams.json" })]
         [AllureId(10)]
-        public void TryPostToLoginWithInvalidParams()
+        public void TryPostToLoginWithInvalidParams(JToken testData)
         {
             apiResource = "api/verifyLogin";
-            Dictionary<string, string> param = new Dictionary<string, string>();
-            param.Add("email", "j.m@e.com");
-            param.Add("password", "SecureP@ss");
-            string expectedText = "User not found!";
+            Dictionary<string, string> param = new Dictionary<string, string>
+            {
+                { "email", testData["email"]?.ToString() },
+                { "password", testData["password"]?.ToString() }
+            };
+            string expectedText = testData["message"]?.ToString();
 
             RestResponse response;
             Message jsonResponse = method.GetJsonResponse<Message>(apiResource, Method.Post, out response, sendWithParams: true, param);
@@ -190,33 +198,34 @@ namespace APITests
             });
         }
 
-        [Test]
+        [Test, TestCaseSource(typeof(TestDataLoader), nameof(TestDataLoader.LoadTestData), new object[] { "TestData/CreateUser.json" })]
         [AllureId(11)]
         [AllureTag("Can be FAILED if user not deleted in prev. RUN")]
-        public void PostToCreateUserAccount()
+        public void PostToCreateUserAccount(JToken testData)
         {
             apiResource = "api/createAccount";
-            Dictionary<string, string> param = new Dictionary<string, string>();
-            param.Add("name", "John");
-            param.Add("email", "j.d@e.com");
-            param.Add("password", "SecureP@ss123");
-            param.Add("title", "Mr");
-            param.Add("birth_date", "16");
-            param.Add("birth_month", "1");
-            param.Add("birth_year", "1999");
-            param.Add("firstname", "John");
-            param.Add("lastname", "Doe");
-            param.Add("company", "Doe Industries");
-            param.Add("address1", "123 Main Street");
-            param.Add("address2", "Suite 456");
-            param.Add("country", "United States");
-            param.Add("zipcode", "California");
-            param.Add("state", "California");
-            param.Add("city", "Los Angeles");
-            param.Add("mobile_number", "+1-555-123-4567");
+            Dictionary<string, string> param = new Dictionary<string, string>
+            {
+                { "name", testData["name"]?.ToString() },
+                { "email", testData["email"]?.ToString()},
+                { "password", testData["password"]?.ToString()},
+                { "title", testData["title"]?.ToString() },
+                { "birth_date", testData["birth_date"]?.ToString() },
+                { "birth_month", testData["birth_month"]?.ToString() },
+                { "birth_year", testData["birth_year"]?.ToString() },
+                { "firstname", testData["firstname"]?.ToString() },
+                { "lastname", testData["lastname"]?.ToString() },
+                { "company", testData["company"]?.ToString() },
+                { "address1", testData["address1"]?.ToString() },
+                { "address2", testData["address2"]?.ToString() },
+                { "country", testData["country"]?.ToString() },
+                { "zipcode", testData["zipcode"]?.ToString() },
+                { "state", testData["state"]?.ToString() },
+                { "city", testData["city"]?.ToString() },
+                { "mobile_number", testData["mobile_number"]?.ToString() }
+            };
 
-            
-            string expectedText = "User created!";
+            string expectedText = testData["created_message"]?.ToString();
 
             RestResponse response;
             Message jsonResponse = method.GetJsonResponse<Message>(apiResource, Method.Post, out response, sendWithParams: true, param);
@@ -228,32 +237,32 @@ namespace APITests
             });
         }
 
-        [Test]
+        [Test, TestCaseSource(typeof(TestDataLoader), nameof(TestDataLoader.LoadTestData), new object[] { "TestData/CreateUser.json" })]
         [AllureId(12)]
-        public void PutToUpdateUserAccount()
+        public void PutToUpdateUserAccount(JToken testData)
         {
             apiResource = "api/updateAccount";
-            Dictionary<string, string> param = new Dictionary<string, string>();
-            param.Add("name", "J");
-            param.Add("email", "j.d@e.com");
-            param.Add("password", "SecureP@ss123");
-            param.Add("title", "Mr");
-            param.Add("birth_date", "16");
-            param.Add("birth_month", "1");
-            param.Add("birth_year", "1999");
-            param.Add("firstname", "John");
-            param.Add("lastname", "Doe");
-            param.Add("company", "Doe Industries");
-            param.Add("address1", "123 Main Street");
-            param.Add("address2", "Suite 456");
-            param.Add("country", "United States");
-            param.Add("zipcode", "California");
-            param.Add("state", "California");
-            param.Add("city", "Los Angeles");
-            param.Add("mobile_number", "+1-555-123-4567");
-
-
-            string expectedText = "User updated!";
+            Dictionary<string, string> param = new Dictionary<string, string>
+            {
+                { "name", testData["name"]?.ToString() },
+                { "email", testData["email"]?.ToString()},
+                { "password", testData["password"]?.ToString()},
+                { "title", testData["title"]?.ToString() },
+                { "birth_date", testData["birth_date"]?.ToString() },
+                { "birth_month", testData["birth_month"]?.ToString() },
+                { "birth_year", testData["birth_year"]?.ToString() },
+                { "firstname", testData["firstname"]?.ToString() },
+                { "lastname", testData["lastname"]?.ToString() },
+                { "company", testData["company"]?.ToString() },
+                { "address1", testData["address1"]?.ToString() },
+                { "address2", testData["address2"]?.ToString() },
+                { "country", testData["country"]?.ToString() },
+                { "zipcode", testData["zipcode"]?.ToString() },
+                { "state", testData["state"]?.ToString() },
+                { "city", testData["city"]?.ToString() },
+                { "mobile_number", testData["new_mobile_number"]?.ToString() }
+            };
+            string expectedText = testData["updated_message"]?.ToString();
 
             RestResponse response;
             Message jsonResponse = method.GetJsonResponse<Message>(apiResource, Method.Put, out response, sendWithParams: true, param);
@@ -265,14 +274,16 @@ namespace APITests
             });
         }
 
-        [Test]
+        [Test, TestCaseSource(typeof(TestDataLoader), nameof(TestDataLoader.LoadTestData), new object[] { "TestData/CreateUser.json" })]
         [AllureId(13)]
-        public void DeleteCreatedAccount()
+        public void DeleteCreatedAccount(JToken testData)
         {
             apiResource = "api/deleteAccount";
-            Dictionary<string, string> param = new Dictionary<string, string>();
-            param.Add("email", "j.d@e.com");
-            param.Add("password", "SecureP@ss123");
+            Dictionary<string, string> param = new Dictionary<string, string>
+            {
+                { "email", testData["email"]?.ToString() },
+                { "password", testData["password"]?.ToString() }
+            };
 
             string expectedText = "Account deleted!";
 

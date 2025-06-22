@@ -1,0 +1,27 @@
+﻿[
+  {
+    "badRequestText": "Bad request, email or password parameter is missing in POST request.",
+    "notSupportedText": "This request method is not supported.",
+
+    "name": "John",
+    "email": "j.d@e.com",
+    "password": "SecureP@ss123",
+    "title": "Mr",
+    "birth_date": "16",
+    "birth_month": "1",
+    "birth_year": "1999",
+    "firstname": "John",
+    "lastname": "Doe",
+    "company": "Doe Industries",
+    "address1": "123 Main Street",
+    "address2": "Suite 456",
+    "country": "United States",
+    "zipcode": "California",
+    "state": "California",
+    "city": "Los Angeles",
+    "mobile_number": "+1-555-123-4567",
+    "created_message": "User created!",
+    "new_mobile_number": "+1-555-123-0000",
+    "updated_message": "User updated!"
+  }
+]

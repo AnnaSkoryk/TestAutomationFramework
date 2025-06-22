@@ -1,0 +1,9 @@
+﻿[
+  {
+    "email": "j.k@e.com",
+    "password": "SecureP@ss123",
+    "message": "User exists!",
+    "badRequestText": "Bad request, email or password parameter is missing in POST request.",
+    "notSupportedText": "This request method is not supported."
+  }
+]

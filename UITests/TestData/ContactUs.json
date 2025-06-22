@@ -1,0 +1,11 @@
+﻿[
+  {
+    "getInTouchText": "GET IN TOUCH",
+    "name": "Johnie",
+    "email": "j.k@e.com",
+    "subject": "test subject",
+    "message": "this is test message",
+    "fileToUpload": "FileToUpload.png",
+    "successMessageText": "Success! Your details have been submitted successfully."
+  }
+]

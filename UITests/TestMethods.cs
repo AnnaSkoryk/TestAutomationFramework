@@ -1,7 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
-using System.Xml.Linq;
+using OpenQA.Selenium.Support.UI;
 using UITests.PageObject;
+using SeleniumExtras.WaitHelpers;
 
 namespace UITests
 {
@@ -137,6 +138,44 @@ namespace UITests
             //check login page displayed
             LoginPage loginPage = new LoginPage(driver);
             loginPage.CheckLoginPageDisplayed();
+        }
+
+        public void CheckContactUsForm(JToken testData)
+        {
+            //get test data
+            HomePage homePage = new HomePage(driver);
+            homePage.contactUsTab.Click();
+
+            //check text msg
+            ContactUsPage contactUsPage = new ContactUsPage(driver);
+            string getInTouchText = testData["getInTouchText"]?.ToString();
+            CheckElementExist(By.XPath(contactUsPage.getInTouchTextXPathLocator));
+            CheckElementText(By.XPath(contactUsPage.getInTouchTextXPathLocator), getInTouchText);
+
+            string name = testData["name"]?.ToString();
+            string email = testData["email"]?.ToString();
+            string subject = testData["subject"]?.ToString();
+            string message = testData["message"]?.ToString();
+            string fileToUpload = testData["fileToUpload"]?.ToString();
+            fileToUpload = Path.GetFullPath(Path.Combine("TestData", fileToUpload));
+
+
+            contactUsPage.nameField.SendKeys(name);
+            contactUsPage.emailField.SendKeys(email);
+            contactUsPage.subjectField.SendKeys(subject);
+            contactUsPage.messageField.SendKeys(message);
+            contactUsPage.upoadFileField.SendKeys(fileToUpload);
+            contactUsPage.submitButton.Click();
+
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            wait.Until(ExpectedConditions.AlertIsPresent());
+            IAlert alert = driver.SwitchTo().Alert();
+            alert.Accept();
+
+            string successMessageText = testData["successMessageText"]?.ToString();
+            CheckElementExist(By.CssSelector(contactUsPage.successMessageTextCSSLocator));
+            CheckElementText(By.CssSelector(contactUsPage.successMessageTextCSSLocator), successMessageText);
+            contactUsPage.homeButton.Click();
         }
     }
 }
